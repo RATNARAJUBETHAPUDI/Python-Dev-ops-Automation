@@ -1,0 +1,13 @@
+import boto3
+import datetime
+
+def lamda_handler(event, context):
+    client = boto3.client('dynamodb'):
+    tables = client.list_tables()['TableNames']
+    
+    for table in table:
+        backup_name = f"{table}-{datetime.datetime.now().strftime('%Y-%m-%d')}"
+        client.create_backup(TableName=table, BackupName=backup_name)
+        
+        
+        return 'Backups created successfully'
